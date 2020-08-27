@@ -24,7 +24,22 @@
   <body>
     <h1 class="title">👊 | ✋ | ✌</h1>
     <label for="inp">Play rock, paper or scissors</label>
+    <div class="board" aria-label="Board">
+      <h2>
+        🤠 <span class="user">0</span> : <span class="computer">0</span> 💻
+      </h2>
+    </div>
     <form>
+      <div class="tooltip">
+        <span class="bottom">Game count</span>
+        <select name="count" id="count" aria-label="Game count">
+          <option value="5" selected>5</option>
+          <option value="9">9</option>
+          <option value="11">11</option>
+          <option value="13">13</option>
+          <option value="15">15</option>
+        </select>
+      </div>
       <input
         id="inp"
         name="inp"
@@ -32,12 +47,14 @@
         maxlength="10"
         minlength="4"
         class="inp"
+        aria-label="Write rock,paper or scissors."
       />
       <button class="btn" type="submit">
         <i class="fas fa-plus-square"></i>
       </button>
     </form>
     <div class="results"></div>
+    <button class="restart hidden">Restart<i class="fas fa-undo"></i></button>
     <script src="./app.js"></script>
   </body>
 </html>

@@ -1,10 +1,13 @@
 // This is an app lets you play a rock paper scissors with computer whose
 // responses are randomly generated. The game is designed
-// to be refreshed every 5 turns. Hope you enjoy. 😊
+// to be refreshed every 'x turns. Hope you enjoy. 😊
 
 const input = document.querySelector(".inp");
 const button = document.querySelector(".btn");
+const count = document.querySelector("#count");
 const resultList = document.querySelector(".results");
+const resultBoard = document.querySelector(".board");
+const restartButton = document.querySelector(".restart");
 let global_gameCount = 0;
 let global_winner = 0;
 
@@ -12,18 +15,16 @@ let global_winner = 0;
 button.addEventListener("click", (event) => {
   //Prevent form from submitting
   event.preventDefault();
-  //prevent writing while deleting
-
   // Get the response from input
-  const response = input.value.match(/^rock|paper|scissors$/i)
+  const response = input.value.match(/^(rock|paper|scissors)$/i)
     ? input.value.toLowerCase()
     : null;
   //If response is valid call the game function
   if (response) {
     //console.log(resultList.classList[1]);
     if (resultList.classList[1] !== ".no-write") myGame(response);
-    else addWaitMessage();
-  } else console.log("Please enter rock, paper or scissors");
+    //else addWaitMessage();
+  } else alert("Please enter rock, paper or scissors");
   input.value = "";
 });
 
@@ -45,15 +46,12 @@ async function myGame(userResponse) {
   global_gameCount++;
 
   // If game is over declare the winner end restart the game by simply deleting nodes
-  if (global_gameCount === 5) {
+  if (global_gameCount === parseInt(count.value)) {
     //console.log("game over", global_winner, global_gameCount);
+    resultList.classList.toggle(".no-write");
     declareFinalWinner(global_winner);
-    resultList.classList.toggle(".no-write");
-    await sleep(5500);
-    del(); //Delete the nodes in DOM
-    resultList.classList.toggle(".no-write");
-    global_gameCount = 0;
-    global_winner = 0;
+    restartButton.classList.toggle("hidden");
+    restartButton.addEventListener("click", del);
   }
 }
 
@@ -78,9 +76,9 @@ async function createWaitEffect() {
   resultList.removeChild(wait);
 }
 
-//Append the final winner after 5 game to the div
+//Append the final winner after 'x' amount of game to the div
 function declareFinalWinner(winner) {
-  const finalResult = document.createElement("h3");
+  const finalResult = document.createElement("h2");
   if (winner === 0) finalResult.innerText = "No winner!";
   else {
     const winnerString = winner >= 1 ? "you" : "computer";
@@ -92,24 +90,35 @@ function declareFinalWinner(winner) {
 
 //Create an element that declares the winner of the turn on append it to div
 function declareWinner(result, user, computer) {
+  let uCount = parseInt(
+    resultBoard.firstElementChild.firstElementChild.innerText
+  );
+  let cCount = parseInt(
+    resultBoard.firstElementChild.lastElementChild.innerText
+  );
   const declare = document.createElement("h3");
   let str = "";
   switch (result) {
     case -1:
+      cCount++;
       str = "You lost 😔";
       break;
     case 1:
+      uCount++;
       str = "You won! 🥳";
       break;
     default:
       str = "It's a tie 😒";
       break;
   }
+  resultBoard.firstElementChild.firstElementChild.innerText = uCount;
+  resultBoard.firstElementChild.lastElementChild.innerText = cCount;
   declare.innerText =
     `🤠  ${user.charAt(0).toUpperCase() + user.slice(1)}  🆚  ${
       computer.charAt(0).toUpperCase() + computer.slice(1)
     }  💻` +
-    ".   " +
+    ". " +
+    "  " +
     str;
   resultList.appendChild(declare);
 }
@@ -147,12 +156,19 @@ function computerPlay() {
 //Clear div in DOM to play again
 function del() {
   //console.log("refreshing...");
-  let i = 5;
+  restartButton.classList.toggle("hidden");
+
+  resultBoard.firstElementChild.firstElementChild.innerText = "0";
+  resultBoard.firstElementChild.lastElementChild.innerText = "0";
+  let i = parseInt(count.value);
   while (i >= 0) {
     resultList.childNodes.forEach((node) => resultList.removeChild(node));
     //resultList.removeChild(resultList.firstElementChild);
     i--;
   }
+  global_gameCount = 0;
+  global_winner = 0;
+  resultList.classList.toggle(".no-write");
 }
 
 //Sleep function for wait effect

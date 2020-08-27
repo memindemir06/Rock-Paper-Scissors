@@ -16,6 +16,11 @@ body {
   color: white;
 }
 
+.board {
+  margin: 1rem;
+  margin-bottom: 0;
+}
+
 .title {
   margin: 1rem;
   text-align: center;
@@ -26,14 +31,17 @@ label {
 }
 
 form {
-  min-height: 20vh;
+  margin: 1rem 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 10px;
+  box-shadow: 10px 10px 3px rgba(0, 0, 0, 0.1);
 }
 
 form input,
-form button {
+form button,
+form select {
   padding: 0.5rem;
   font-size: 2rem;
   border: none;
@@ -46,6 +54,7 @@ form button {
   transition: all 0.3s ease;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+  border-left: 1px solid rgba(46, 46, 46, 0.075);
 }
 
 form button:hover {
@@ -53,13 +62,29 @@ form button:hover {
   color: white;
 }
 
+form select {
+  color: #2274a5;
+  cursor: pointer;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+
+  font-size: 31px;
+  border-right: 1px solid rgba(46, 46, 46, 0.075);
+}
+
 input:focus,
-button:focus {
+button:focus,
+select:focus,
+option:focus {
   outline: none;
 }
 
 i {
   pointer-events: none;
+}
+
+h2 {
+  margin-top: 0.8rem;
 }
 
 h3 {
@@ -75,15 +100,74 @@ h3 {
   align-items: center;
 }
 
+.restart {
+  padding: 0.8rem;
+  margin-top: 2rem;
+  font-size: 2rem;
+  border: none;
+  background: white;
+  box-shadow: 10px 10px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  color: #53f4ff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.restart:hover {
+  background: #2274a5;
+  color: white;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.fa-undo {
+  margin-left: 0.5rem;
+}
+
+.tooltip {
+  display: inline-block;
+  position: relative;
+}
+
+.tooltip .bottom {
+  top: 55px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding: 10px 20px;
+  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.7);
+  font-weight: normal;
+  font-size: 13px;
+  border-radius: 8px;
+  position: absolute;
+  z-index: 99999999;
+  box-sizing: border-box;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.8s;
+}
+
+.tooltip:hover .bottom {
+  visibility: visible;
+  opacity: 1;
+}
+
 @media only screen and (max-width: 426px) {
   body {
     font-size: small;
   }
   form input,
-  form button {
-    font-size: 1.2rem;
+  form button,
+  form select {
+    font-size: 1rem;
+  }
+  form select {
+    font-size: 15px;
   }
   label {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 }
