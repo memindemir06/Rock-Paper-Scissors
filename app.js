@@ -1,6 +1,6 @@
 // This is an app lets you play a rock paper scissors with computer whose
 // responses are randomly generated. The game is designed
-// to be refreshed every 'x turns. Hope you enjoy. 😊
+// to be refreshed after selected turn count. Hope you enjoy. 😊
 
 const input = document.querySelector(".inp");
 const button = document.querySelector(".btn");
@@ -13,41 +13,37 @@ let global_winner = 0;
 
 //EVENT LISTENER
 button.addEventListener("click", (event) => {
-  //Prevent form from submitting
+  // Prevent form from submitting
   event.preventDefault();
-  // Get the response from input
+  // Get the response from input and check validity
   const response = input.value.match(/^(rock|paper|scissors)$/i)
     ? input.value.toLowerCase()
     : null;
-  //If response is valid call the game function
+  // If response is valid call the play the game
   if (response) {
-    //console.log(resultList.classList[1]);
     if (resultList.classList[1] !== ".no-write") myGame(response);
-    //else addWaitMessage();
-  } else alert("Please enter rock, paper or scissors");
-  input.value = "";
+  } else {
+    glowEffect(); // A red glow effect for invalid input
+  }
+  input.value = ""; // Refresh the input box
 });
 
 //FUNCTIONS
 
 async function myGame(userResponse) {
-  //Random response from computer
+  //Generate random response
   const computerResponse = computerPlay();
-  //console.log(computerResponse);
-  //Create three dots
+  //Create three dots for a while for loading effect
   await createWaitEffect();
   //Compare the user and computer responses and determine the winner
   const result = compare(userResponse, computerResponse);
-  declareWinner(result, userResponse, computerResponse); //Let them know the winner huh 😀
-  // Determine the final winner
-  //console.log("result: ", result);
-  global_winner += result;
-  //console.log("winner: ", global_winner);
-  global_gameCount++;
+  declareWinner(result, userResponse, computerResponse); //Declare the winner in the HTML
+  global_winner += result; //Update the variable to determine the winner at the end of the game
+  global_gameCount++; //Update the variable to keep track of played turns
 
-  // If game is over declare the winner end restart the game by simply deleting nodes
+  // If game is over declare the winner and add a restart
+  //button to restart the game by simply deleting existing nodes
   if (global_gameCount === parseInt(count.value)) {
-    //console.log("game over", global_winner, global_gameCount);
     resultList.classList.toggle(".no-write");
     declareFinalWinner(global_winner);
     restartButton.classList.toggle("hidden");
@@ -55,28 +51,28 @@ async function myGame(userResponse) {
   }
 }
 
-//Wait message
-function addWaitMessage() {
-  const message = document.createElement("h3");
-  message.innerText = "Please wait . . .";
-  resultList.appendChild(message);
+//Glow Effect for Invalid Input
+async function glowEffect() {
+  input.classList.toggle("glow-red");
+  await sleep(500);
+  input.classList.toggle("glow-red");
 }
 
-//As the name suggest 😆
+//As the name suggests...
 async function createWaitEffect() {
   let wait = document.createElement("h2");
   resultList.appendChild(wait);
   let i = 3;
   while (i--) {
     await sleep(200);
-    wait.innerText += ".   ";
+    wait.innerText += ". ";
+    wait.innerText += " ";
   }
   await sleep(200);
-  //console.log(wait.innerText);
   resultList.removeChild(wait);
 }
 
-//Append the final winner after 'x' amount of game to the div
+//Declare the final winner in the page after given amount of turns
 function declareFinalWinner(winner) {
   const finalResult = document.createElement("h2");
   if (winner === 0) finalResult.innerText = "No winner!";
@@ -85,10 +81,9 @@ function declareFinalWinner(winner) {
     finalResult.innerText = `Game over, ${winnerString} won!`;
   }
   resultList.appendChild(finalResult);
-  //console.log(finalResult.innerText);
 }
 
-//Create an element that declares the winner of the turn on append it to div
+//Create an element that declares the winner of the turn and append it to the page
 function declareWinner(result, user, computer) {
   let uCount = parseInt(
     resultBoard.firstElementChild.firstElementChild.innerText
@@ -137,7 +132,7 @@ function compare(user, computer) {
   } else return 1; //User won
 }
 
-// Computer plays randomly
+// Generate random response
 function computerPlay() {
   const rand = Math.floor(Math.random() * 3);
   switch (rand) {
@@ -153,17 +148,14 @@ function computerPlay() {
   }
 }
 
-//Clear div in DOM to play again
+// Clear div in DOM to play again
 function del() {
-  //console.log("refreshing...");
   restartButton.classList.toggle("hidden");
-
   resultBoard.firstElementChild.firstElementChild.innerText = "0";
   resultBoard.firstElementChild.lastElementChild.innerText = "0";
   let i = parseInt(count.value);
   while (i >= 0) {
     resultList.childNodes.forEach((node) => resultList.removeChild(node));
-    //resultList.removeChild(resultList.firstElementChild);
     i--;
   }
   global_gameCount = 0;

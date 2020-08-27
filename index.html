@@ -30,26 +30,31 @@
       </h2>
     </div>
     <form>
-      <div class="tooltip">
-        <span class="bottom">Game count</span>
-        <select name="count" id="count" aria-label="Game count">
-          <option value="5" selected>5</option>
-          <option value="9">9</option>
-          <option value="11">11</option>
-          <option value="13">13</option>
-          <option value="15">15</option>
-        </select>
-      </div>
+      <select
+        name="count"
+        id="count"
+        title="Choose Game Count"
+        aria-label="Game count"
+      >
+        <option value="5" selected>5</option>
+        <option value="9">9</option>
+        <option value="11">11</option>
+        <option value="13">13</option>
+        <option value="15">15</option>
+      </select>
       <input
         id="inp"
         name="inp"
         type="text"
-        maxlength="10"
+        maxlength="8"
         minlength="4"
         class="inp"
+        title="Choose your fighter!"
+        aria-autocomplete="none"
+        autocomplete="off"
         aria-label="Write rock,paper or scissors."
       />
-      <button class="btn" type="submit">
+      <button class="btn" title="Play!" type="submit">
         <i class="fas fa-plus-square"></i>
       </button>
     </form>
